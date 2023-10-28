@@ -1,0 +1,34 @@
+{
+    "name": "CameraControls",
+    "maps": [
+        {
+            "name": "Camera",
+            "id": "65e346ff-6e25-4405-a840-13f7de26801e",
+            "actions": [
+                {
+                    "name": "LookAround",
+                    "type": "PassThrough",
+                    "id": "935a8ff8-2406-4ba0-9019-ad79a8181b25",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7af1a6d0-caa7-4a18-8c61-4d57423187e4",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookAround",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
