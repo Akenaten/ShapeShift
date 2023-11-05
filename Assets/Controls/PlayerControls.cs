@@ -35,6 +35,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouching"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ce07459-5b61-4e59-924b-3220369d6225"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Block"",
+                    ""type"": ""Value"",
+                    ""id"": ""84b0cfc3-9e8a-4ad0-a15c-7dc034b01ca0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Backstep"",
+                    ""type"": ""Button"",
+                    ""id"": ""b3b46434-6c91-4fa4-98bc-2a86cab46b6b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -147,6 +174,72 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f340e17-f36d-4d4f-bd2d-c56404ac8fa8"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouching"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d7b03e9a-535c-4472-8d0b-62de92a0c2fe"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouching"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""756665c6-4ad5-417a-8fc9-6b9cd4ad955c"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d71ac415-5b9d-4b6b-b6f5-6c0f51cf8dc6"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""559b1cc4-2c06-4576-a95c-75b2f0c0231f"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Backstep"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5dfda948-90ae-4382-97d1-e8d4154ce9d5"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Backstep"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -156,6 +249,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Player Movement
         m_PlayerMovement = asset.FindActionMap("Player Movement", throwIfNotFound: true);
         m_PlayerMovement_Movement = m_PlayerMovement.FindAction("Movement", throwIfNotFound: true);
+        m_PlayerMovement_Crouching = m_PlayerMovement.FindAction("Crouching", throwIfNotFound: true);
+        m_PlayerMovement_Block = m_PlayerMovement.FindAction("Block", throwIfNotFound: true);
+        m_PlayerMovement_Backstep = m_PlayerMovement.FindAction("Backstep", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -218,11 +314,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerMovement;
     private List<IPlayerMovementActions> m_PlayerMovementActionsCallbackInterfaces = new List<IPlayerMovementActions>();
     private readonly InputAction m_PlayerMovement_Movement;
+    private readonly InputAction m_PlayerMovement_Crouching;
+    private readonly InputAction m_PlayerMovement_Block;
+    private readonly InputAction m_PlayerMovement_Backstep;
     public struct PlayerMovementActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerMovementActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_PlayerMovement_Movement;
+        public InputAction @Crouching => m_Wrapper.m_PlayerMovement_Crouching;
+        public InputAction @Block => m_Wrapper.m_PlayerMovement_Block;
+        public InputAction @Backstep => m_Wrapper.m_PlayerMovement_Backstep;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -235,6 +337,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
+            @Crouching.started += instance.OnCrouching;
+            @Crouching.performed += instance.OnCrouching;
+            @Crouching.canceled += instance.OnCrouching;
+            @Block.started += instance.OnBlock;
+            @Block.performed += instance.OnBlock;
+            @Block.canceled += instance.OnBlock;
+            @Backstep.started += instance.OnBackstep;
+            @Backstep.performed += instance.OnBackstep;
+            @Backstep.canceled += instance.OnBackstep;
         }
 
         private void UnregisterCallbacks(IPlayerMovementActions instance)
@@ -242,6 +353,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
+            @Crouching.started -= instance.OnCrouching;
+            @Crouching.performed -= instance.OnCrouching;
+            @Crouching.canceled -= instance.OnCrouching;
+            @Block.started -= instance.OnBlock;
+            @Block.performed -= instance.OnBlock;
+            @Block.canceled -= instance.OnBlock;
+            @Backstep.started -= instance.OnBackstep;
+            @Backstep.performed -= instance.OnBackstep;
+            @Backstep.canceled -= instance.OnBackstep;
         }
 
         public void RemoveCallbacks(IPlayerMovementActions instance)
@@ -262,5 +382,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IPlayerMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnCrouching(InputAction.CallbackContext context);
+        void OnBlock(InputAction.CallbackContext context);
+        void OnBackstep(InputAction.CallbackContext context);
     }
 }
