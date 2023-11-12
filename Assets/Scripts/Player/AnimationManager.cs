@@ -28,9 +28,23 @@ public class AnimationManager : MonoBehaviour
 
     }
 
-    // public void backStep(){
-    //     animator.SetTrigger("Backstep");
-    // }
+// BACKSTEP HAS ROOT MOTION AND GLIDES BACK TO PREVIOUS POSITION AFTERWARDS.
+    public void backStep(){
+        animator.SetTrigger("Backstep");
+    }
+
+    public void manageRoll(){
+        animator.SetTrigger("Roll");
+    }
+
+    public void manageAttack(){
+        animator.SetTrigger("Attack");
+    }
+
+    public void setVelocity(float currentVelocity){
+        currentVelocity = (currentVelocity > 1) ? 1 : currentVelocity;
+        animator.SetFloat("Velocity", currentVelocity);
+    }
 
     
     // void OnAnimatorMove()

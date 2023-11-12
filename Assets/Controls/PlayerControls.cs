@@ -62,6 +62,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""bacaca74-1a10-48ed-b098-e5f3da6308ca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -240,6 +249,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Backstep"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6cc8ad93-2464-4fc1-a008-c093bb82a196"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -252,6 +272,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerMovement_Crouching = m_PlayerMovement.FindAction("Crouching", throwIfNotFound: true);
         m_PlayerMovement_Block = m_PlayerMovement.FindAction("Block", throwIfNotFound: true);
         m_PlayerMovement_Backstep = m_PlayerMovement.FindAction("Backstep", throwIfNotFound: true);
+        m_PlayerMovement_Attack = m_PlayerMovement.FindAction("Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -317,6 +338,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerMovement_Crouching;
     private readonly InputAction m_PlayerMovement_Block;
     private readonly InputAction m_PlayerMovement_Backstep;
+    private readonly InputAction m_PlayerMovement_Attack;
     public struct PlayerMovementActions
     {
         private @PlayerControls m_Wrapper;
@@ -325,6 +347,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Crouching => m_Wrapper.m_PlayerMovement_Crouching;
         public InputAction @Block => m_Wrapper.m_PlayerMovement_Block;
         public InputAction @Backstep => m_Wrapper.m_PlayerMovement_Backstep;
+        public InputAction @Attack => m_Wrapper.m_PlayerMovement_Attack;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -346,6 +369,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Backstep.started += instance.OnBackstep;
             @Backstep.performed += instance.OnBackstep;
             @Backstep.canceled += instance.OnBackstep;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
         }
 
         private void UnregisterCallbacks(IPlayerMovementActions instance)
@@ -362,6 +388,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Backstep.started -= instance.OnBackstep;
             @Backstep.performed -= instance.OnBackstep;
             @Backstep.canceled -= instance.OnBackstep;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
         }
 
         public void RemoveCallbacks(IPlayerMovementActions instance)
@@ -385,5 +414,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnCrouching(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);
         void OnBackstep(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
 }
